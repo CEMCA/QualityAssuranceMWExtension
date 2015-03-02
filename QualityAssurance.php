@@ -65,3 +65,19 @@ $wgHomedirPath = "/mnineteen/extensions/QualityAssurance/";
 
 // Enable Foo
 #$wgBoilerPlateEnableFoo = true;
+
+# Schema updates for update.php
+
+$wgHooks['LoadExtensionSchemaUpdates'][] = 'addqa_noOfResponses';
+function addqa_noOfResponses( DatabaseUpdater $updater ) {
+	$updater->addExtensionTable( 'qa_noOfResponses',
+		dirname( __FILE__ ) . '/table.sql', true );
+	return true;
+}
+
+$wgHooks['LoadExtensionSchemaUpdates'][] = 'addqa_answers';
+function addqa_answers( DatabaseUpdater $updater ) {
+	$updater->addExtensionTable( 'qa_answers',
+		dirname( __FILE__ ) . '/table.sql', true );
+	return true;
+}
