@@ -81,3 +81,8 @@ function addqa_answers( DatabaseUpdater $updater ) {
 		dirname( __FILE__ ) . '/table.sql', true );
 	return true;
 }
+
+// API's
+$wgAutoloadClasses['qaAssesments'] = dirname( __FILE__ ) . '/apis/qaAssesments.php';
+$wgAPIModules['qaAssesments'] = 'qaAssesments';
+

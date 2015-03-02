@@ -3,6 +3,10 @@ $ ( document ).ready ( function() {
 	$articleId=wgArticleId;
 	$("#title").html("The id of the page is : "+$articleId);
 
+	$.get(wgScriptPath+"/api.php?action=qaAssesments&qaPageNo="+$articleId+"&qatype=basic&format=json",function(data) {
+		console.log(data);
+	});
+
 	var $questionTypes= [
 		"T  :  Teaching and learning processes",
 		"I  :  Information and material content",
@@ -42,6 +46,6 @@ $ ( document ).ready ( function() {
 		]
 	];
 
-	
+
 
 })
