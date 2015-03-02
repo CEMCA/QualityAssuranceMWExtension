@@ -55,29 +55,6 @@ class qaAssesments extends ApiQueryBase {
 
 		if ( $qatype == 'detailed' ) {
 
-			$dbr = $this->getDB();
-
-				$res = $dbr->select(
-				'pe_evaluations',
-				array( '*' ),
-				$conds = 'Activity="' . $activityPage . '"',
-				$fname = __METHOD__,
-				$options = array( '' )
-			);
-
-			$num = 1;
-			$entries = array();
-
-			foreach ( $res as $row ) {
-				$entry = array();
-				$evaluation = json_decode( $row->evaluation, true );
-				$entry['id'] = $row->activityId;
-				$entry['evaluaterUName'] = $row->evaluaterUName;
-				$entry['evaluation'] = $evaluation;
-				$entries['entry' . $num] = $entry;
-				$num++;
-			}
-
 			$result->addValue( null, $this->getModuleName(), $entries );
 		}
 
