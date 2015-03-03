@@ -24,6 +24,7 @@ class TagQa {
 			Number of responses - <span id="numResponses">getting...</span> <br>
 			</span>
 			<button id="assess"> Make a quality assessment of this article </button>
+			<span id="assesmentForm"></span>
 			<br>';
 		return $ret;
 	}

@@ -18,6 +18,74 @@ $ ( document ).ready ( function() {
 		}
 	});
 
+	$("#assess").click(function(){
+		//console.log("Assess fn callses");
+		$("#assess").hide();
+		$("#assesmentForm").html("");
+		$("#assesmentForm").show();
+		$("#assesmentForm").append("<br>");
+		$("#assesmentForm").append("<br> <h2> Please answer the following questions in order to make the quality assessment. </h2>");
+
+		qnum=1;
+		for (i in $questions) {
+			$table="<br><table border='1' width='100%'>";
+			$table += " \
+				<tr> \
+				<th rowspan='2'> \
+				"+$questionTypes[i]+" \
+				</th> \
+				<td colspan='4'> Quality Assesment </td> \
+				</tr> \
+				<tr> \
+				<td>not yet</td> \
+				<td>a little</td> \
+				<td>fairly well</td> \
+				<td>very much</td> \
+				</tr> \
+			";
+			for (j in $questions[i]) {
+				$table+="<tr>"
+				$table+="<td>"+$questions[i][j]+"<span id='error"+qnum+"' style='color:red'></span></td>";
+				$table+="\
+				<td><label for='"+qnum+"1'><input type='radio' name='"+qnum+"' value='1' id='"+qnum+"1'></label></td> \
+				<td><label for='"+qnum+"2'><input type='radio' name='"+qnum+"' value='2' id='"+qnum+"2'></label></td> \
+				<td><label for='"+qnum+"3'><input type='radio' name='"+qnum+"' value='3' id='"+qnum+"3'></label></td> \
+				<td><label for='"+qnum+"4'><input type='radio' name='"+qnum+"' value='4' id='"+qnum+"4'></label></td> \
+				";
+				$table+="</tr>"
+				qnum+=1;
+			}
+			$table+="</table><br>";
+			$("#assesmentForm").append($table);
+
+		}
+		$("#assesmentForm").append("<button id='submitForm'> Submit </button> ");
+		$("#assesmentForm").append("<span id='errorSubmit' style='color:red' ></span>");
+		$("#submitForm").click(function() {
+			$("#errorSubmit").html("");
+			var answers={};
+			var allAnswered=true;
+			for(var i=1;i<=21;i++) {
+				$("#error"+i).html("");
+				var ans=$("input[name="+i+"]:checked").val();
+				if (!ans) {
+					allAnswered=false;
+					$("#error"+i).html("<br>Please answer this question.");
+				}
+				answers[i]=ans;
+			}
+ 			console.log(answers);
+ 			if (!allAnswered) {
+ 				$("#errorSubmit").html("<br>You need to answer all questions before proceeding</br>");
+ 				return false;
+ 			}
+			$("#assesmentForm").hide();
+			
+			$("#assess").show();
+		});
+		//$("#assess").show();
+	});
+
 	var $questionTypes= [
 		"T  :  Teaching and learning processes",
 		"I  :  Information and material content",
