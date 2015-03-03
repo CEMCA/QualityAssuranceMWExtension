@@ -14,7 +14,16 @@ class TagQa {
 		global $wgHomedirPath;
 		$ret = '<script src="' . $wgHomedirPath . '/resources/qa.js"></script>';
 		$ret .= '
-			<p id="title">Quality Assurance text</p>
+			<br>
+			<span id = "ratingInfo">
+			Quality Assesment Rating (Overall) - <span id="roverall">getting...</span> <br>
+			Quality Assesment Rating (T) - <span id="rT">getting...</span> <br>
+			Quality Assesment Rating (I) - <span id="rI">getting...</span> <br>
+			Quality Assesment Rating (P) - <span id="rP">getting...</span> <br>
+			Quality Assesment Rating (S) - <span id="rS">getting...</span> <br>
+			Number of responses - <span id="numResponses">getting...</span> <br>
+			</span>
+			<button id="assess"> Make a quality assessment of this article </button>
 			<br>';
 		return $ret;
 	}

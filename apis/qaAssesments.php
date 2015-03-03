@@ -41,13 +41,27 @@ class qaAssesments extends ApiQueryBase {
 			$entries['qaPageNo']=$qaPageNo;
 			//print $res;
 
+			$emptyFlag=true;
+
 			foreach ( $res as $row ) {
+				$emptyFlag=false;
+				
 				$entries['numResponses']=$row->numResponses;
 				$entries['TScore']=$row->TScore;
 				$entries['IScore']=$row->IScore;
 				$entries['PScore']=$row->PScore;
 				$entries['SScore']=$row->SScore;
-				$entries['overallScore']=$row->overallScore;				
+				$entries['overallScore']=$row->overallScore;
+			}
+			//the below if needs to be removed
+			//$entries['tese']=$emptyFlag;
+			if ($emptyFlag) {
+				$entries['numResponses']=0;
+				$entries['TScore']=0;
+				$entries['IScore']=0;
+				$entries['PScore']=0;
+				$entries['SScore']=0;
+				$entries['overallScore']=0;				
 			}
 
 			$result->addValue( null, $this->getModuleName(), $entries );

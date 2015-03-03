@@ -5,6 +5,17 @@ $ ( document ).ready ( function() {
 
 	$.get(wgScriptPath+"/api.php?action=qaAssesments&qaPageNo="+$articleId+"&qatype=basic&format=json",function(data) {
 		console.log(data);
+		qaAssesments=data.qaAssesments;
+		$("#roverall").html(qaAssesments.overallScore+"/4.0");
+		$("#rT").html(qaAssesments.TScore+"/4.0");
+		$("#rI").html(qaAssesments.IScore+"/4.0");
+		$("#rP").html(qaAssesments.PScore+"/4.0");
+		$("#rS").html(qaAssesments.SScore+"/4.0");
+		$("#numResponses").html(qaAssesments.numResponses+"");
+
+		if (qaAssesments.numResponses == 0) {
+			$("#ratingInfo").html("No quality assessments yet.<br>");
+		}
 	});
 
 	var $questionTypes= [
