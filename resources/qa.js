@@ -19,6 +19,10 @@ $ ( document ).ready ( function() {
 	});
 
 	$("#assess").click(function(){
+
+
+		activateCloseProtection();
+
 		//console.log("Assess fn callses");
 		$("#assess").hide();
 		$("#assesmentForm").html("");
@@ -158,7 +162,7 @@ $ ( document ).ready ( function() {
  				return false;
  			}
 			$("#assesmentForm").hide();
-
+			deactivateCloseProtection();
 			$("#assess").show();
 		});
 		//$("#assess").show();
@@ -204,5 +208,14 @@ $ ( document ).ready ( function() {
 	];
 
 
-
 })
+
+function activateCloseProtection() {
+	window.onbeforeunload = function() {
+    	return "You have not completed the form. The data will not be saved if you do not complete and submit. Are you sure you want to quit?";
+  	}
+};
+
+function deactivateCloseProtection() {
+	window.onbeforeunload = null;
+};
