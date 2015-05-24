@@ -24,11 +24,10 @@ class qaAssesments extends ApiQueryBase {
 		//$result->addValue( null, $this->getModuleName(),$qatype);
 
 
-
+		$dbr = $this->getDB();
 		if ( $qatype == 'basic' ) {
 
-			$dbr = $this->getDB();
-
+			
 			$res = $dbr->select(
 				'qa_noOfResponses',
 				array( '*' ),
@@ -69,6 +68,64 @@ class qaAssesments extends ApiQueryBase {
 
 		if ( $qatype == 'detailed' ) {
 
+			$scores = $dbr->select(
+				'qa_answers',
+				array( '*' ),
+				array( 'pageId' => $qaPageNo,),
+				$fname = __METHOD__,
+				$options = array( '' )
+			);
+
+			$entries = array();
+
+			foreach ($scores as $row) {
+
+				$entry = array();
+
+				$localAnswer =  json_decode($row->answer);
+
+				$entry['answers'] = $localAnswer;
+
+				$user = User::newFromId($row->userId);
+				$entry['username'] = $user->getName();
+
+				$tLocal = 0.0;
+				$iLocal = 0.0;
+				$pLocal = 0.0;
+				$sLocal = 0.0;
+
+				foreach ($localAnswer as $key => $value) {
+					if ( $key <= 8 ) {
+						$tLocal += intval($value);
+					}
+					else if ( $key <= 12) {
+						$iLocal += intval($value);
+					}
+					else if ( $key <= 18 ) {
+						$pLocal += intval($value);
+					}
+					else {
+						$sLocal += intval($value);
+					}
+				}
+
+				$tTotal = ($tLocal/8) ;
+				$iTotal = ($iLocal/4) ;
+				$pTotal = ($pLocal/6) ;
+				$sTotal = ($sLocal/3) ;
+
+				$averageTotel = (($tLocal+$iLocal+$pLocal+$sLocal)/21) ;
+
+				$entry['t'] = $tTotal;
+				$entry['i'] = $iTotal;
+				$entry['p'] = $pTotal;
+				$entry['s'] = $sTotal;
+				$entry['avg'] = $averageTotel;
+
+				array_push($entries, $entry);
+			}
+
+			
 			$result->addValue( null, $this->getModuleName(), $entries );
 		}
 

@@ -19,6 +19,93 @@ $ ( document ).ready ( function() {
 		}
 	});
 
+	$("#showDetailedInfo").click(function(){
+
+
+		$("#assesmentForm").html("");
+		$("#assesmentForm").show();
+
+		$("#assesmentForm").append("<br> <h2>Below is the list of QA assessments. </h2><br>");
+
+		$("#showDetailedInfo").hide();
+
+		$.get(wgScriptPath+"/api.php?action=qaAssesments&qaPageNo="+$articleId+"&qatype=detailed&format=json",function(data) {
+
+			table = "<br><table border='1' class='prettytable' width='100%'>";
+			table += "\
+				<tr>\
+					<th> User Name </th>\
+					<th> QA Score </th>\
+					<th> T </th>\
+					<th> I </th>\
+					<th> P </th>\
+					<th> S </th>\
+					<th> Get Detailed Assessments </th>\
+				</tr>\
+			";
+
+			for (i in data.qaAssesments) {
+
+				table += "<tr>";
+
+				userQA = data.qaAssesments[i];
+
+				table += "<td>"+userQA.username+"</td>";
+				table += "<td>"+userQA.avg+"</td>";
+				table += "<td>"+userQA.t+"</td>";
+				table += "<td>"+userQA.i+"</td>";
+				table += "<td>"+userQA.p+"</td>";
+				table += "<td>"+userQA.s+"</td>";
+				table += "<td align='center'>"+"<button class='details' key='"+i+"' username='"+userQA.username+"' > Detailed assessments </button></td>";
+
+				table += "</tr>";
+			};
+
+			table += "</table>";
+
+			$("#assesmentForm").append(table);
+			$("#assesmentForm").append("<span id='detailsHolder'></span>")
+
+			$(".details").click( function() {
+
+				evalDetails = "";
+				numTemp = 1;
+				key = $(this).attr("key");
+				answersTemp = data.qaAssesments[key].answers;
+				console.log(answersTemp);
+				for (i in  $questionTypes ) {
+					evalDetails += "<h1>" + $questionTypes[i] + "</h1>";
+
+					evalDetails += "<ul>";
+					for (j in $questions[i]) {
+						evalDetails += "<li>";
+						evalDetails += $questions[i][j] + " : ";
+						evalDetails += "<b>"+$answerTypes[answersTemp[numTemp]]+"</b>";
+						evalDetails += "</li>";
+						numTemp += 1;
+					}
+					evalDetails += "</ul>";
+
+				}
+
+
+				text = "\
+					<div id='dialog' title='QA evaluation answers for user "+$(this).attr("username")+"'> \
+					  "+evalDetails+"\
+					</div>	\
+				";
+				$("#detailsHolder").html(text);
+				$( "#dialog" ).dialog({ width: "75%"});
+				return false;
+			});
+
+			console.log(data);
+
+		});
+
+
+	});
+
 	$("#assess").click(function(){
 
 
@@ -28,6 +115,8 @@ $ ( document ).ready ( function() {
 				return false;
 			}
 
+			$("#showDetailedInfo").hide();
+
 			var submitData={};
 
 	 		submitData.qatype = "check";
@@ -35,7 +124,7 @@ $ ( document ).ready ( function() {
 
 			$.post(wgScriptPath+"/api.php?action=qaSubmit&format=json",submitData,function(data){
 				console.log(data);
-				if ( data.qaSubmit.alreadySubmitted ) {
+				if (data.qaSubmit.alreadySubmitted ) {
 					alert("You have already submitted an assesment for this article. Your submission will be modified.")
 				}
 			});
@@ -52,7 +141,7 @@ $ ( document ).ready ( function() {
 			qnum=1;
 			for (i in $questions) {
 				$table="<span id='qaform"+i+"'>";
-				$table+="<br><table border='1' width='100%'>";
+				$table+="<br><table border='1' class='prettytable' width='100%'>";
 				$table += " \
 					<tr> \
 					<th rowspan='2'> \
@@ -191,13 +280,14 @@ $ ( document ).ready ( function() {
 					console.log(data);
 					if (data.qaSubmit.success) {
 						alert("Successfully submitted the QA evaluation")
+						$("#showDetailedInfo").show();
+						$("#assesmentForm").html("");
+						deactivateCloseProtection();
+						$("#assess").show();
 					}
 				});
 
-	 			
-				$("#assesmentForm").html("");
-				deactivateCloseProtection();
-				$("#assess").show();
+	 		
 			});
 			//$("#assess").show();
 		});
@@ -244,6 +334,13 @@ $ ( document ).ready ( function() {
 		]
 	];
 
+	var $answerTypes = [
+		"",
+		"not yet",
+		"a little",
+		"fairly well",
+		"very much"
+	];
 
 })
 
