@@ -23,6 +23,9 @@ class TagQa {
 			Quality Assesment Rating (S) - <span id="rS">getting...</span> <br>
 			Number of responses - <span id="numResponses">getting...</span> <br>
 			</span>
+			<span id = "detailedInfo">
+			<button id="showDetailedInfo">Show detailed assesments</button>
+			</span>			
 			<button id="assess"> Make a quality assessment of this article </button>
 			<span id="assesmentForm"></span>
 			<br>';

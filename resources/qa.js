@@ -1,7 +1,7 @@
 $ ( document ).ready ( function() {
 
 	$articleId=wgArticleId;
-	$("#title").html("The id of the page is : "+$articleId);
+	console.log("The id of the page is : "+$articleId);
 
 	$.get(wgScriptPath+"/api.php?action=qaAssesments&qaPageNo="+$articleId+"&qatype=basic&format=json",function(data) {
 		console.log(data);
@@ -15,158 +15,195 @@ $ ( document ).ready ( function() {
 
 		if (qaAssesments.numResponses == 0) {
 			$("#ratingInfo").html("No quality assessments yet.<br>");
+			$("#showDetailedInfo").hide();
 		}
 	});
 
 	$("#assess").click(function(){
 
 
-		activateCloseProtection();
+		$.get(wgScriptPath+"/api.php?action=query&meta=userinfo&format=json",function(data){ 
+			if (data.query.userinfo.id === 0) {
+				alert("You need to be logged in to make an assessment");
+				return false;
+			}
 
-		//console.log("Assess fn callses");
-		$("#assess").hide();
-		$("#assesmentForm").html("");
-		$("#assesmentForm").show();
-		$("#assesmentForm").append("<br>");
-		$("#assesmentForm").append("<br> <h2> Please answer the following questions in order to make the quality assessment. </h2>");
+			var submitData={};
 
-		qnum=1;
-		for (i in $questions) {
-			$table="<span id='qaform"+i+"'>";
-			$table+="<br><table border='1' width='100%'>";
-			$table += " \
-				<tr> \
-				<th rowspan='2'> \
-				"+$questionTypes[i]+" \
-				</th> \
-				<td colspan='4'> Quality Assesment </td> \
-				</tr> \
-				<tr> \
-				<td>not yet</td> \
-				<td>a little</td> \
-				<td>fairly well</td> \
-				<td>very much</td> \
-				</tr> \
-			";
-			for (j in $questions[i]) {
-				$table+="<tr>"
-				$table+="<td>"+$questions[i][j]+"<span id='error"+qnum+"' style='color:red'></span></td>";
-				$table+="\
-				<td><label for='"+qnum+"1'><input type='radio' name='"+qnum+"' value='1' id='"+qnum+"1'></label></td> \
-				<td><label for='"+qnum+"2'><input type='radio' name='"+qnum+"' value='2' id='"+qnum+"2'></label></td> \
-				<td><label for='"+qnum+"3'><input type='radio' name='"+qnum+"' value='3' id='"+qnum+"3'></label></td> \
-				<td><label for='"+qnum+"4'><input type='radio' name='"+qnum+"' value='4' id='"+qnum+"4'></label></td> \
+	 		submitData.qatype = "check";
+			submitData.qaPageNo = $articleId;
+
+			$.post(wgScriptPath+"/api.php?action=qaSubmit&format=json",submitData,function(data){
+				console.log(data);
+				if ( data.qaSubmit.alreadySubmitted ) {
+					alert("You have already submitted an assesment for this article. Your submission will be modified.")
+				}
+			});
+
+			activateCloseProtection();
+
+			//console.log("Assess fn callses");
+			$("#assess").hide();
+			$("#assesmentForm").html("");
+			$("#assesmentForm").show();
+			$("#assesmentForm").append("<br>");
+			$("#assesmentForm").append("<br> <h2> Please answer the following questions in order to make the quality assessment. </h2>");
+
+			qnum=1;
+			for (i in $questions) {
+				$table="<span id='qaform"+i+"'>";
+				$table+="<br><table border='1' width='100%'>";
+				$table += " \
+					<tr> \
+					<th rowspan='2'> \
+					"+$questionTypes[i]+" \
+					</th> \
+					<td colspan='4'> Quality Assesment </td> \
+					</tr> \
+					<tr> \
+					<td>not yet</td> \
+					<td>a little</td> \
+					<td>fairly well</td> \
+					<td>very much</td> \
+					</tr> \
 				";
-				$table+="</tr>"
-				qnum+=1;
-			}
-			$table+="</table><br>";
-			if (i!=3)
-				$table+="<button id='submitForm"+i+"'>Next</button> ";
-			else
-				$table+="<button id='submitForm"+i+"'>Submit</button> ";
-
-			$table+="<span id='errorSubmit"+i+"' style='color:red' ></span>";
-			$table+="</span>";
-			$("#assesmentForm").append($table);
-		}
-
-		$("#qaform1").hide();
-		$("#qaform2").hide();
-		$("#qaform3").hide();
-		
-		var answers={};		
-
-		$("#submitForm0").click(function() {
-			$("#errorSubmit0").html("");
-			
-			var allAnswered=true;
-			for(var i=1;i<=8;i++) {
-				$("#error"+i).html("");
-				var ans=$("input[name="+i+"]:checked").val();
-				if (!ans) {
-					allAnswered=false;
-					$("#error"+i).html("<br>Please answer this question.");
+				for (j in $questions[i]) {
+					$table+="<tr>"
+					$table+="<td>"+$questions[i][j]+"<span id='error"+qnum+"' style='color:red'></span></td>";
+					$table+="\
+					<td><label for='"+qnum+"1'><input type='radio' name='"+qnum+"' value='1' id='"+qnum+"1'></label></td> \
+					<td><label for='"+qnum+"2'><input type='radio' name='"+qnum+"' value='2' id='"+qnum+"2'></label></td> \
+					<td><label for='"+qnum+"3'><input type='radio' name='"+qnum+"' value='3' id='"+qnum+"3'></label></td> \
+					<td><label for='"+qnum+"4'><input type='radio' name='"+qnum+"' value='4' id='"+qnum+"4'></label></td> \
+					";
+					$table+="</tr>"
+					qnum+=1;
 				}
-				answers[i]=ans;
+				$table+="</table><br>";
+				if (i!=3)
+					$table+="<button id='submitForm"+i+"'>Next</button> ";
+				else
+					$table+="<button id='submitForm"+i+"'>Submit</button> ";
+
+				$table+="<span id='errorSubmit"+i+"' style='color:red' ></span>";
+				$table+="</span>";
+				$("#assesmentForm").append($table);
 			}
- 			console.log(answers);
- 			if (!allAnswered) {
- 				$("#errorSubmit0").html("<br>You need to answer all questions before proceeding</br>");
- 				return false;
- 			}
- 			$("#qaform0").hide();
- 			$("#qaform1").show();
+
+			$("#qaform1").hide();
+			$("#qaform2").hide();
+			$("#qaform3").hide();
+			
+			var answers={};		
+
+			$("#submitForm0").click(function() {
+				$("#errorSubmit0").html("");
+				
+				var allAnswered=true;
+				for(var i=1;i<=8;i++) {
+					$("#error"+i).html("");
+					var ans=$("input[name="+i+"]:checked").val();
+					if (!ans) {
+						allAnswered=false;
+						$("#error"+i).html("<br>Please answer this question.");
+					}
+					answers[i]=ans;
+				}
+	 			console.log(answers);
+	 			if (!allAnswered) {
+	 				$("#errorSubmit0").html("<br>You need to answer all questions before proceeding</br>");
+	 				return false;
+	 			}
+	 			$("#qaform0").hide();
+	 			$("#qaform1").show();
+			});
+
+			$("#submitForm1").click(function() {
+				$("#errorSubmit1").html("");
+				
+				var allAnswered=true;
+				for(var i=9;i<=12;i++) {
+					$("#error"+i).html("");
+					var ans=$("input[name="+i+"]:checked").val();
+					if (!ans) {
+						allAnswered=false;
+						$("#error"+i).html("<br>Please answer this question.");
+					}
+					answers[i]=ans;
+				}
+	 			console.log(answers);
+	 			if (!allAnswered) {
+	 				$("#errorSubmit1").html("<br>You need to answer all questions before proceeding</br>");
+	 				return false;
+	 			}
+	 			$("#qaform1").hide();
+	 			$("#qaform2").show();
+			});
+
+			$("#submitForm2").click(function() {
+				$("#errorSubmit2").html("");
+				
+				var allAnswered=true;
+				for(var i=13;i<=18;i++) {
+					$("#error"+i).html("");
+					var ans=$("input[name="+i+"]:checked").val();
+					if (!ans) {
+						allAnswered=false;
+						$("#error"+i).html("<br>Please answer this question.");
+					}
+					answers[i]=ans;
+				}
+	 			console.log(answers);
+	 			if (!allAnswered) {
+	 				$("#errorSubmit2").html("<br>You need to answer all questions before proceeding</br>");
+	 				return false;
+	 			}
+	 			$("#qaform2").hide();
+	 			$("#qaform3").show();
+			});
+
+			$("#submitForm3").click(function() {
+				$("#errorSubmit3").html("");
+				
+				var allAnswered=true;
+				for(var i=19;i<=21;i++) {
+					$("#error"+i).html("");
+					var ans=$("input[name="+i+"]:checked").val();
+					if (!ans) {
+						allAnswered=false;
+						$("#error"+i).html("<br>Please answer this question.");
+					}
+					answers[i]=ans;
+				}
+	 			console.log(answers);
+	 			if (!allAnswered) {
+	 				$("#errorSubmit3").html("<br>You need to answer all questions before proceeding</br>");
+	 				return false;
+	 			}
+
+				var submitDataFinal={};
+
+		 		submitDataFinal.qatype = "submit";
+				submitDataFinal.qaPageNo = $articleId;
+				submitDataFinal.qaAnswer = JSON.stringify(answers);
+
+				$.post(wgScriptPath+"/api.php?action=qaSubmit&format=json",submitDataFinal,function(data){
+					console.log(data);
+					if (data.qaSubmit.success) {
+						alert("Successfully submitted the QA evaluation")
+					}
+				});
+
+	 			
+				$("#assesmentForm").html("");
+				deactivateCloseProtection();
+				$("#assess").show();
+			});
+			//$("#assess").show();
 		});
 
-		$("#submitForm1").click(function() {
-			$("#errorSubmit1").html("");
-			
-			var allAnswered=true;
-			for(var i=9;i<=12;i++) {
-				$("#error"+i).html("");
-				var ans=$("input[name="+i+"]:checked").val();
-				if (!ans) {
-					allAnswered=false;
-					$("#error"+i).html("<br>Please answer this question.");
-				}
-				answers[i]=ans;
-			}
- 			console.log(answers);
- 			if (!allAnswered) {
- 				$("#errorSubmit1").html("<br>You need to answer all questions before proceeding</br>");
- 				return false;
- 			}
- 			$("#qaform1").hide();
- 			$("#qaform2").show();
-		});
+	});		
 
-		$("#submitForm2").click(function() {
-			$("#errorSubmit2").html("");
-			
-			var allAnswered=true;
-			for(var i=13;i<=18;i++) {
-				$("#error"+i).html("");
-				var ans=$("input[name="+i+"]:checked").val();
-				if (!ans) {
-					allAnswered=false;
-					$("#error"+i).html("<br>Please answer this question.");
-				}
-				answers[i]=ans;
-			}
- 			console.log(answers);
- 			if (!allAnswered) {
- 				$("#errorSubmit2").html("<br>You need to answer all questions before proceeding</br>");
- 				return false;
- 			}
- 			$("#qaform2").hide();
- 			$("#qaform3").show();
-		});
-
-		$("#submitForm3").click(function() {
-			$("#errorSubmit3").html("");
-			
-			var allAnswered=true;
-			for(var i=19;i<=21;i++) {
-				$("#error"+i).html("");
-				var ans=$("input[name="+i+"]:checked").val();
-				if (!ans) {
-					allAnswered=false;
-					$("#error"+i).html("<br>Please answer this question.");
-				}
-				answers[i]=ans;
-			}
- 			console.log(answers);
- 			if (!allAnswered) {
- 				$("#errorSubmit3").html("<br>You need to answer all questions before proceeding</br>");
- 				return false;
- 			}
-			$("#assesmentForm").hide();
-			deactivateCloseProtection();
-			$("#assess").show();
-		});
-		//$("#assess").show();
-	});
 
 	var $questionTypes= [
 		"T  :  Teaching and learning processes",

@@ -1,12 +1,12 @@
 <?php
 /**
- * BoilerPlate extension - the thing that needs you.
+ * OER Quality Assurance extension - the thing that needs you.
  *
- * For more info see http://mediawiki.org/wiki/Extension:BoilerPlate
+ * For more info see https://www.mediawiki.org/wiki/Extension:QualityAssurance
  *
  * @file
  * @ingroup Extensions
- * @author John Doe, 2014
+ * @author Akash Agarwal, 2014
  * @license GNU General Public Licence 2.0 or later
  */
 
@@ -14,34 +14,34 @@ $wgExtensionCredits['other'][] = array(
 	'path' => __FILE__,
 	'name' => 'Quality Assurance',
 	'author' => array(
-		'John Doe',
+		'Akash Agarwal',
 	),
 	'version'  => '0.1',
 	'url' => 'https://www.mediawiki.org/wiki/Extension:QualityAssurance',
-	'descriptionmsg' => 'boilerplate-desc',
+	'descriptionmsg' => 'The CEMCA OER Quality Assurance mediawiki extension.',
 );
 
 /* Setup */
 
 // Register files
-$wgAutoloadClasses['BoilerPlateHooks'] = __DIR__ . '/BoilerPlate.hooks.php';
+//$wgAutoloadClasses['BoilerPlateHooks'] = __DIR__ . '/BoilerPlate.hooks.php';
 $wgAutoloadClasses['SpecialHelloWorld'] = __DIR__ . '/specials/SpecialHelloWorld.php';
-$wgMessagesDirs['BoilerPlate'] = __DIR__ . '/i18n';
-$wgExtensionMessagesFiles['BoilerPlateAlias'] = __DIR__ . '/BoilerPlate.i18n.alias.php';
+//$wgMessagesDirs['BoilerPlate'] = __DIR__ . '/i18n';
+//$wgExtensionMessagesFiles['BoilerPlateAlias'] = __DIR__ . '/BoilerPlate.i18n.alias.php';
 
 // Register hooks
 #$wgHooks['NameOfHook'][] = 'BoilerPlateHooks::onNameOfHook';
 
 // Register special pages
-$wgSpecialPages['HelloWorld'] = 'SpecialHelloWorld';
-$wgSpecialPageGroups['HelloWorld'] = 'other';
+//$wgSpecialPages['HelloWorld'] = 'SpecialHelloWorld';
+//$wgSpecialPageGroups['HelloWorld'] = 'other';
 
 
 // Register tags
 $wgAutoloadClasses['TagQa'] = dirname( __FILE__ ) . '/tags/Qa.php';
 $wgHooks['ParserFirstCallInit'][] = 'TagQa::onParserInit';
 
-
+/*
 // Register modules
 $wgResourceModules['ext.BoilerPlate.foo'] = array(
 	'scripts' => array(
@@ -58,6 +58,7 @@ $wgResourceModules['ext.BoilerPlate.foo'] = array(
 	'localBasePath' => __DIR__,
 	'remoteExtPath' => 'examples/BoilerPlate',
 );
+*/
 
 $wgHomedirPath = "/mnineteen/extensions/QualityAssurance/";
 
@@ -86,3 +87,5 @@ function addqa_answers( DatabaseUpdater $updater ) {
 $wgAutoloadClasses['qaAssesments'] = dirname( __FILE__ ) . '/apis/qaAssesments.php';
 $wgAPIModules['qaAssesments'] = 'qaAssesments';
 
+$wgAutoloadClasses['qaSubmit'] = dirname( __FILE__ ) . '/apis/qaSubmit.php';
+$wgAPIModules['qaSubmit'] = 'qaSubmit';

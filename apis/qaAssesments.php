@@ -29,7 +29,7 @@ class qaAssesments extends ApiQueryBase {
 
 			$dbr = $this->getDB();
 
-				$res = $dbr->select(
+			$res = $dbr->select(
 				'qa_noOfResponses',
 				array( '*' ),
 				$conds = 'pageId="' . $qaPageNo . '"',
