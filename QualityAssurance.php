@@ -60,8 +60,8 @@ $wgResourceModules['ext.BoilerPlate.foo'] = array(
 );
 */
 
-$wgHomedirPath = "/mnineteen/extensions/QualityAssurance/";
-
+$wgHomedirPath = "http://wiki.cemca.org.in/extensions/QualityAssurance/";
+	
 /* Configuration */
 
 // Enable Foo
@@ -80,6 +80,9 @@ $wgHooks['LoadExtensionSchemaUpdates'][] = 'addqa_answers';
 function addqa_answers( DatabaseUpdater $updater ) {
 	$updater->addExtensionTable( 'qa_answers',
 		dirname( __FILE__ ) . '/table.sql', true );
+	$updater->addExtensionField( 'qa_answers', 'answer', dirname( __FILE__ ) . '/table.patch.answer.sql', true );
+	$updater->addExtensionUpdate( array( 'modifyField', 'qa_answers', 'answer',
+		dirname( __FILE__ ) . '/table.patch.answer.sql', true ) );	
 	return true;
 }
 

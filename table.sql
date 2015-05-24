@@ -20,4 +20,3 @@ CREATE TABLE IF NOT EXISTS `qa_answers` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
-ALTER TABLE `qa_answers` CHANGE `answer` `answer` VARCHAR( 500 ) CHARACTER SET ascii COLLATE ascii_bin NOT NULL ;

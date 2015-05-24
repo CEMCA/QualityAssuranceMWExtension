@@ -60,7 +60,15 @@ class qaAssesments extends ApiQueryBase {
 				$entries['IScore']=0;
 				$entries['PScore']=0;
 				$entries['SScore']=0;
-				$entries['overallScore']=0;				
+				$entries['overallScore']=0;
+
+				$res = $dbr->insert(
+					'qa_noOfResponses',
+					array('pageId' => $qaPageNo, 'numResponses' => 0),
+					$fname = __METHOD__,
+					$options = array( '' )
+				);
+
 			}
 
 			$result->addValue( null, $this->getModuleName(), $entries );
@@ -133,7 +141,7 @@ class qaAssesments extends ApiQueryBase {
 	}
 
 	protected function getDB() {
-		return wfGetDB( DB_SLAVE );
+		return wfGetDB( DB_MASTER );
 	}
 
 
