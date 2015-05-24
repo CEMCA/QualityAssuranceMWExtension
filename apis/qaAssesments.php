@@ -46,11 +46,11 @@ class qaAssesments extends ApiQueryBase {
 				$emptyFlag=false;
 				
 				$entries['numResponses']=$row->numResponses;
-				$entries['TScore']=$row->TScore;
-				$entries['IScore']=$row->IScore;
-				$entries['PScore']=$row->PScore;
-				$entries['SScore']=$row->SScore;
-				$entries['overallScore']=$row->overallScore;
+				$entries['TScore']=round($row->TScore,2);
+				$entries['IScore']=round($row->IScore,2);
+				$entries['PScore']=round($row->PScore,2);
+				$entries['SScore']=round($row->SScore,2);
+				$entries['overallScore']=round($row->overallScore,2);
 			}
 			//the below if needs to be removed
 			//$entries['tese']=$emptyFlag;
@@ -116,11 +116,11 @@ class qaAssesments extends ApiQueryBase {
 
 				$averageTotel = (($tLocal+$iLocal+$pLocal+$sLocal)/21) ;
 
-				$entry['t'] = $tTotal;
-				$entry['i'] = $iTotal;
-				$entry['p'] = $pTotal;
-				$entry['s'] = $sTotal;
-				$entry['avg'] = $averageTotel;
+				$entry['t'] = round($tTotal,2);
+				$entry['i'] = round($iTotal,2);
+				$entry['p'] = round($pTotal,2);
+				$entry['s'] = round($sTotal,2);
+				$entry['avg'] = round($averageTotel,2);
 
 				array_push($entries, $entry);
 			}
