@@ -279,7 +279,7 @@ $ ( document ).ready ( function() {
 				$.post(wgScriptPath+"/api.php?action=qaSubmit&format=json",submitDataFinal,function(data){
 					console.log(data);
 					if (data.qaSubmit.success) {
-						alert("Successfully submitted the QA evaluation")
+						alert("Successfully submitted the QA evaluation.Please refresh this page to see your changes.")
 						$("#showDetailedInfo").show();
 						$("#assesmentForm").html("");
 						deactivateCloseProtection();
