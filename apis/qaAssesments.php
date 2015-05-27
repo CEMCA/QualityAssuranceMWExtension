@@ -94,8 +94,13 @@ class qaAssesments extends ApiQueryBase {
 
 				$entry['answers'] = $localAnswer;
 
-				$user = User::newFromId($row->userId);
-				$entry['username'] = $user->getName();
+				if ($row->userId != 0) {
+					$user = User::newFromId($row->userId);
+					$entry['username'] = $user->getName();
+				}
+				else {
+					$entry['username'] = $localAnswer->Name. " , " . $localAnswer->country. " , " . $localAnswer->place;
+				}
 
 				$tLocal = 0.0;
 				$iLocal = 0.0;

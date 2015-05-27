@@ -60,7 +60,7 @@ $wgResourceModules['ext.BoilerPlate.foo'] = array(
 );
 */
 
-$wgHomedirPath = "http://wiki.cemca.org.in/extensions/QualityAssurance/";
+$wgHomedirPath = "http://localhost/mnineteen/extensions/QualityAssurance/";
 	
 /* Configuration */
 

@@ -34,7 +34,7 @@ $ ( document ).ready ( function() {
 			table = "<br><table border='1' class='prettytable' width='100%'>";
 			table += "\
 				<tr>\
-					<th> User Name </th>\
+					<th> User </th>\
 					<th> QA Score </th>\
 					<th> T </th>\
 					<th> I </th>\
@@ -108,26 +108,31 @@ $ ( document ).ready ( function() {
 
 	$("#assess").click(function(){
 
+		loggedIn = true;
 
 		$.get(wgScriptPath+"/api.php?action=query&meta=userinfo&format=json",function(data){ 
 			if (data.query.userinfo.id === 0) {
-				alert("You need to be logged in to make an assessment");
-				return false;
+				//alert("You need to be logged in to make an assessment");
+				//return false;
+				loggedIn = false;
 			}
+
 
 			$("#showDetailedInfo").hide();
 
-			var submitData={};
+				if (loggedIn) {
+					var submitData={};
 
-	 		submitData.qatype = "check";
-			submitData.qaPageNo = $articleId;
+			 		submitData.qatype = "check";
+					submitData.qaPageNo = $articleId;
 
-			$.post(wgScriptPath+"/api.php?action=qaSubmit&format=json",submitData,function(data){
-				console.log(data);
-				if (data.qaSubmit.alreadySubmitted ) {
-					alert("You have already submitted an assesment for this article. Your submission will be modified.")
-				}
-			});
+					$.post(wgScriptPath+"/api.php?action=qaSubmit&format=json",submitData,function(data){
+						console.log(data);
+						if (data.qaSubmit.alreadySubmitted ) {
+							alert("You have already submitted an assesment for this article. Your submission will be modified.")
+						}
+					});
+			}
 
 			activateCloseProtection();
 
@@ -136,7 +141,21 @@ $ ( document ).ready ( function() {
 			$("#assesmentForm").html("");
 			$("#assesmentForm").show();
 			$("#assesmentForm").append("<br>");
+
+
 			$("#assesmentForm").append("<br> <h2> Please answer the following questions in order to make the quality assessment. </h2>");
+
+			basicInfo = "\
+			<span id ='basicInfo'>\
+			Your Name : <input type='text' name='fname'><br>\
+			Place : <input type='text' name='place'><br>\
+			Country : <input type='text' name='country'><br>\
+			<button id='submitFormx'>Next</button>\
+			<span id='errorSubmit' style='color:red' >\
+			</span>\
+			";
+
+			$("#assesmentForm").append(basicInfo);
 
 			qnum=1;
 			for (i in $questions) {
@@ -179,11 +198,35 @@ $ ( document ).ready ( function() {
 				$("#assesmentForm").append($table);
 			}
 
+			$("#qaform0").hide();
 			$("#qaform1").hide();
 			$("#qaform2").hide();
 			$("#qaform3").hide();
 			
 			var answers={};		
+
+			$("#submitFormx").click(function() {
+				$("#errorSubmit").html("");
+				
+				
+				infoName = $("input[name=fname]").val();
+				infoplace = $("input[name=place]").val();
+				infocountry = $("input[name=country]").val();
+
+				answers.Name = infoName;
+				answers.place = infoplace;
+				answers.country = infocountry;
+
+				//console.log(infoName);
+
+	 			if (infoName == "" || infoplace == "" || infocountry == "" ) {
+	 				$("#errorSubmit").html("<br>You need to answer all questions before proceeding</br>");
+	 				return false;
+	 			}
+	 			$("#qaform0").show();
+	 			$("#basicInfo").hide();
+			});
+
 
 			$("#submitForm0").click(function() {
 				$("#errorSubmit0").html("");

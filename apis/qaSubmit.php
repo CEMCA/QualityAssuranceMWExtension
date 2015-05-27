@@ -23,14 +23,22 @@ class qaSubmit extends ApiQueryBase {
 			$this->dieUsage( 'noqaPageNo' , 'page no cannot be null' );
 		}
 
+		$loggedIn = 1;
+
 		if ( !$wgUser->isLoggedIn() ) {
-            $this->dieUsage( 'must be logged in',
-                'notloggedin' );
-        } ;
+            $loggedIn = 0;
+        };
+
 		//$result->addValue( null, $this->getModuleName(),$qatype);
 
 		$dbr = $this->getDB();
-		$userId = $wgUser->getId();
+
+		if ($loggedIn == 1) {
+			$userId = $wgUser->getId();
+		}
+		else {
+			$userId = 0;
+		}
 
 		if ( $qatype == 'check' ) {
 
@@ -55,6 +63,7 @@ class qaSubmit extends ApiQueryBase {
 
 		if ( $qatype == 'submit' ) {
 
+
 			$answers = filter_var( $params['qaAnswer'], FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES );
 
 
@@ -72,7 +81,7 @@ class qaSubmit extends ApiQueryBase {
 				$entryExists = true;
 			}
 
-			if (!$entryExists) {
+			if (!$entryExists || $userId == 0) {
 				$res = $dbr->insert(
 					'qa_answers',
 					array('pageId' => $qaPageNo, 'userId' => $userId, 'answer' => $answers),
