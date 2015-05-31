@@ -12,7 +12,7 @@
 
 $wgExtensionCredits['other'][] = array(
 	'path' => __FILE__,
-	'name' => 'Quality Assurance',
+	'name' => 'QualityAssurance',
 	'author' => array(
 		'Akash Agarwal',
 	),

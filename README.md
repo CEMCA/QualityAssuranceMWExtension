@@ -20,7 +20,7 @@ Get the latest extension by (Run the following command in the extensions folder 
 
 ### Step 2
 
-Install the databases required by the extension. Specified in table.sql. The databases can also be installed automatically when you run the [update script](https://www.mediawiki.org/wiki/Manual:Upgrading#Run_the_update_script)
+Install the databases required by the extension. Specified in table.sql. The databases will also be installed automatically when you run the [update script](https://www.mediawiki.org/wiki/Manual:Upgrading#Run_the_update_script)
 
 ### Step 3
 
