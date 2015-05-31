@@ -26,7 +26,7 @@ Install the databases required by the extension. Specified in table.sql. The dat
 
 At the end of the [LocalSettings.php](http://www.mediawiki.org/wiki/Manual:LocalSettings.php) file (but above the PHP end-of-code delimiter, *"?>"*, if present), the following line should be added:
 
-<pre> require_once "$IP/extensions/QualityAssurance/QualityAssurance.php";</pre>>
+<pre> require_once "$IP/extensions/QualityAssurance/QualityAssurance.php";</pre>
 
 ### Step 4
 

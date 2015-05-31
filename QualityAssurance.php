@@ -27,12 +27,6 @@ $wgExtensionCredits['other'][] = array(
 $wgAutoloadClasses['TagQa'] = dirname( __FILE__ ) . '/tags/Qa.php';
 $wgHooks['ParserFirstCallInit'][] = 'TagQa::onParserInit';
 
-
-// Register modules
-
-
-$wgHomedirPath = "/extensions/QualityAssurance/";
-
 /* Configuration */
 
 $wgHooks['LoadExtensionSchemaUpdates'][] = 'addqa_noOfResponses';
@@ -58,3 +52,5 @@ $wgAPIModules['qaAssesments'] = 'qaAssesments';
 
 $wgAutoloadClasses['qaSubmit'] = dirname( __FILE__ ) . '/apis/qaSubmit.php';
 $wgAPIModules['qaSubmit'] = 'qaSubmit';
+
+$wgHomedirPath = "/extensions/QualityAssurance/";
