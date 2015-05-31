@@ -1,8 +1,31 @@
 {
-	"predef": [
-		"mediaWiki",
-		"jQuery"
-	],
+
+	// Enforcing
+	"bitwise": true,
+	"eqeqeq": true,
+	"es3": true,
+	"freeze": true,
+	"latedef": true,
+	"noarg": true,
+	"nonew": true,
+	"undef": true,
+	"unused": true,
+	"strict": false,
+
+	// Relaxing
+	"laxbreak": true,
+	"multistr": true,
+	"es5": true,
+
+	// Environment
 	"browser": true,
-	"smarttabs": true
+
+	"globals": {
+		"mediaWiki": false,
+		"JSON": true,
+		"OO": true,
+		"jQuery": false,
+		"QUnit": false,
+		"sinon": false,
+	}
 }

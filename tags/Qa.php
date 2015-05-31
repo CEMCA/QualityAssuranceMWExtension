@@ -1,9 +1,11 @@
 <?php
+
 /**
- * This file is part of the PeerEvaluation extension.
- * For more info see http://wikieducator.org/Extension:PeerEvaluation
- * @license GNU General Public Licence 2.0 or later
+ * This file is part of the OER Quality Assurance extension.
+ * For more info see https://www.mediawiki.org/wiki/Extension:QualityAssurance
+ * @license CC BY-SA 3.0 or later
  */
+
 class TagQa {
 	static function onParserInit( Parser $parser ) {
 		$parser->setHook( 'qa', array( __CLASS__, 'qaRender' ) );
@@ -14,7 +16,7 @@ class TagQa {
 		global $wgHomedirPath;
 		$ret = '<script src="' . $wgHomedirPath . '/resources/qa.js"></script>';
 		$ret .= '<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>';
-		$ret .= '<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">';		
+		$ret .= '<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">';
 		$ret .= '
 			<br>
 			<span id = "ratingInfo">
@@ -27,7 +29,7 @@ class TagQa {
 			</span>
 			<span id = "detailedInfo">
 			<button id="showDetailedInfo">Show detailed assesments</button>
-			</span>			
+			</span>
 			<button id="assess"> Make a quality assessment of this article </button>
 			<span id="assesmentForm"></span>
 			<br><br><hr><br>';

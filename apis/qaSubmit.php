@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * This file is part of the OER Quality Assurance extension.
+ * For more info see https://www.mediawiki.org/wiki/Extension:QualityAssurance
+ * @license CC BY-SA 3.0 or later
+ */
+
 class qaSubmit extends ApiQueryBase {
 	public function __construct( $query, $moduleName ) {
 		parent :: __construct( $query, $moduleName, '' );
@@ -18,7 +24,7 @@ class qaSubmit extends ApiQueryBase {
 		$qaPageNo = filter_var( $params['qaPageNo'], FILTER_SANITIZE_STRING );
 		$qatype = filter_var( $params['qatype'], FILTER_SANITIZE_STRING );
 
-		
+
 		if ( !$qaPageNo ) {
 			$this->dieUsage( 'noqaPageNo' , 'page no cannot be null' );
 		}
@@ -27,7 +33,7 @@ class qaSubmit extends ApiQueryBase {
             $this->dieUsage( 'must be logged in',
                 'notloggedin' );
         } ;
-		//$result->addValue( null, $this->getModuleName(),$qatype);
+		// $result->addValue( null, $this->getModuleName(),$qatype);
 
 		$dbr = $this->getDB();
 		$userId = $wgUser->getId();
@@ -48,7 +54,7 @@ class qaSubmit extends ApiQueryBase {
 				$entryExists = true;
 			}
 
-			$entries = array('alreadySubmitted' => $entryExists );
+			$entries = array( 'alreadySubmitted' => $entryExists );
 
 			$result->addValue( null, $this->getModuleName(), $entries );
 		}
@@ -72,22 +78,22 @@ class qaSubmit extends ApiQueryBase {
 				$entryExists = true;
 			}
 
-			if (!$entryExists) {
+			if ( !$entryExists ) {
 				$res = $dbr->insert(
 					'qa_answers',
-					array('pageId' => $qaPageNo, 'userId' => $userId, 'answer' => $answers),
+					array( 'pageId' => $qaPageNo, 'userId' => $userId, 'answer' => $answers ),
 					$fname = __METHOD__,
-					$options = array( '' )				
+					$options = array( '' )
 				);
 			}
 
 			else {
 				$res = $dbr->update(
 					'qa_answers',
-					array('pageId' => $qaPageNo, 'userId' => $userId, 'answer' => $answers),
-					array('pageId' => $qaPageNo, 'userId' => $userId,),
+					array( 'pageId' => $qaPageNo, 'userId' => $userId, 'answer' => $answers ),
+					array( 'pageId' => $qaPageNo, 'userId' => $userId, ),
 					$fname = __METHOD__,
-					$options = array( '' )				
+					$options = array( '' )
 				);
 			}
 
@@ -103,61 +109,61 @@ class qaSubmit extends ApiQueryBase {
 			$scores = $dbr->select(
 				'qa_answers',
 				array( '*' ),
-				array( 'pageId' => $qaPageNo,),
+				array( 'pageId' => $qaPageNo, ),
 				$fname = __METHOD__,
 				$options = array( '' )
 			);
 
 
-			foreach ($scores as $row) {
+			foreach ( $scores as $row ) {
 				$num += 1;
 
-				$localAnswer =  json_decode($row->answer);
+				$localAnswer =  json_decode( $row->answer );
 
 				$tLocal = 0.0;
 				$iLocal = 0.0;
 				$pLocal = 0.0;
 				$sLocal = 0.0;
 
-				foreach ($localAnswer as $key => $value) {
+				foreach ( $localAnswer as $key => $value ) {
 					if ( $key <= 8 ) {
-						$tLocal += intval($value);
+						$tLocal += intval( $value );
 					}
-					else if ( $key <= 12) {
-						$iLocal += intval($value);
+					else if ( $key <= 12 ) {
+						$iLocal += intval( $value );
 					}
 					else if ( $key <= 18 ) {
-						$pLocal += intval($value);
+						$pLocal += intval( $value );
 					}
 					else {
-						$sLocal += intval($value);
+						$sLocal += intval( $value );
 					}
 				}
 
-				$tTotal += ($tLocal/8) ;
-				$iTotal += ($iLocal/4) ;
-				$pTotal += ($pLocal/6) ;
-				$sTotal += ($sLocal/3) ;
+				$tTotal += ( $tLocal / 8 ) ;
+				$iTotal += ( $iLocal / 4 ) ;
+				$pTotal += ( $pLocal / 6 ) ;
+				$sTotal += ( $sLocal / 3 ) ;
 
-				$averageTotel += (($tLocal+$iLocal+$pLocal+$sLocal)/21) ;
+				$averageTotel += ( ( $tLocal + $iLocal + $pLocal + $sLocal ) / 21 ) ;
 			}
 
 			$res = $dbr->update(
 				'qa_noOfResponses',
-				array('pageId' => $qaPageNo,
+				array( 'pageId' => $qaPageNo,
 					'numResponses' => $num,
-					'TScore' => $tTotal/$num,
-					'IScore' => $iTotal/$num,
-					'PScore' => $pTotal/$num,
-					'SScore' => $sTotal/$num,
-					'overallScore' => $averageTotel/$num,
+					'TScore' => $tTotal / $num,
+					'IScore' => $iTotal / $num,
+					'PScore' => $pTotal / $num,
+					'SScore' => $sTotal / $num,
+					'overallScore' => $averageTotel / $num,
 				),
-				array('pageId' => $qaPageNo,),
+				array( 'pageId' => $qaPageNo, ),
 				$fname = __METHOD__,
-				$options = array( '' )				
+				$options = array( '' )
 			);
 
-			$entries = array('success' => true, 'answers' => $answers, 'average' => $averageTotel );
+			$entries = array( 'success' => true, 'answers' => $answers, 'average' => $averageTotel );
 
 			$result->addValue( null, $this->getModuleName(), $entries );
 		}

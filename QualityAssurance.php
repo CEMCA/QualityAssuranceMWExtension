@@ -1,13 +1,13 @@
 <?php
 /**
- * OER Quality Assurance extension - the thing that needs you.
+ * OER Quality Assurance extension
  *
  * For more info see https://www.mediawiki.org/wiki/Extension:QualityAssurance
  *
  * @file
  * @ingroup Extensions
  * @author Akash Agarwal, 2014
- * @license CC BY-SA 3.0
+ * @license CC BY-SA 3.0 or later
  */
 
 $wgExtensionCredits['other'][] = array(
@@ -32,7 +32,7 @@ $wgHooks['ParserFirstCallInit'][] = 'TagQa::onParserInit';
 
 
 $wgHomedirPath = "http://wiki.cemca.org.in/extensions/QualityAssurance/";
-	
+
 /* Configuration */
 
 $wgHooks['LoadExtensionSchemaUpdates'][] = 'addqa_noOfResponses';
@@ -48,7 +48,7 @@ function addqa_answers( DatabaseUpdater $updater ) {
 		dirname( __FILE__ ) . '/table.sql', true );
 	$updater->addExtensionField( 'qa_answers', 'answer', dirname( __FILE__ ) . '/table.patch.answer.sql', true );
 	$updater->addExtensionUpdate( array( 'modifyField', 'qa_answers', 'answer',
-		dirname( __FILE__ ) . '/table.patch.answer.sql', true ) );	
+		dirname( __FILE__ ) . '/table.patch.answer.sql', true ) );
 	return true;
 }
 
