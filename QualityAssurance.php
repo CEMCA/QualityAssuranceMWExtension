@@ -31,7 +31,7 @@ $wgHooks['ParserFirstCallInit'][] = 'TagQa::onParserInit';
 // Register modules
 
 
-$wgHomedirPath = "http://wiki.cemca.org.in/extensions/QualityAssurance/";
+$wgHomedirPath = "/extensions/QualityAssurance/";
 
 /* Configuration */
 
