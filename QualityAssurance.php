@@ -7,7 +7,7 @@
  * @file
  * @ingroup Extensions
  * @author Akash Agarwal, 2014
- * @license GNU General Public Licence 2.0 or later
+ * @license CC BY-SA 3.0
  */
 
 $wgExtensionCredits['other'][] = array(
@@ -23,51 +23,17 @@ $wgExtensionCredits['other'][] = array(
 
 /* Setup */
 
-// Register files
-//$wgAutoloadClasses['BoilerPlateHooks'] = __DIR__ . '/BoilerPlate.hooks.php';
-$wgAutoloadClasses['SpecialHelloWorld'] = __DIR__ . '/specials/SpecialHelloWorld.php';
-//$wgMessagesDirs['BoilerPlate'] = __DIR__ . '/i18n';
-//$wgExtensionMessagesFiles['BoilerPlateAlias'] = __DIR__ . '/BoilerPlate.i18n.alias.php';
-
-// Register hooks
-#$wgHooks['NameOfHook'][] = 'BoilerPlateHooks::onNameOfHook';
-
-// Register special pages
-//$wgSpecialPages['HelloWorld'] = 'SpecialHelloWorld';
-//$wgSpecialPageGroups['HelloWorld'] = 'other';
-
-
 // Register tags
 $wgAutoloadClasses['TagQa'] = dirname( __FILE__ ) . '/tags/Qa.php';
 $wgHooks['ParserFirstCallInit'][] = 'TagQa::onParserInit';
 
-/*
-// Register modules
-$wgResourceModules['ext.BoilerPlate.foo'] = array(
-	'scripts' => array(
-		'modules/ext.BoilerPlate.foo.js',
-	),
-	'styles' => array(
-		'modules/ext.BoilerPlate.foo.css',
-	),
-	'messages' => array(
-	),
-	'dependencies' => array(
-	),
 
-	'localBasePath' => __DIR__,
-	'remoteExtPath' => 'examples/BoilerPlate',
-);
-*/
+// Register modules
+
 
 $wgHomedirPath = "http://wiki.cemca.org.in/extensions/QualityAssurance/";
 	
 /* Configuration */
-
-// Enable Foo
-#$wgBoilerPlateEnableFoo = true;
-
-# Schema updates for update.php
 
 $wgHooks['LoadExtensionSchemaUpdates'][] = 'addqa_noOfResponses';
 function addqa_noOfResponses( DatabaseUpdater $updater ) {
